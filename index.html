@@ -1,0 +1,97 @@
+<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#0a1519"><meta name="mobile-web-app-capable" content="yes"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"><title>Buku Servis Motor</title>
+<style>
+:root{--bg:#0a1519;--card:#11242b;--line:#1f3a44;--acc:#ffb300;--ok:#3ddc97;--warn:#ffb300;--bad:#ff5a3c;--tx:#eef6f8;--mut:#7f9aa3}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0}
+body{background:var(--bg);color:var(--tx);font:15px system-ui,-apple-system,Roboto,sans-serif;height:100dvh;overflow:hidden;user-select:none}
+.mut{color:var(--mut);font-size:13px}.row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
+.num{font-style:italic;font-weight:800;letter-spacing:-.5px}
+#splash{position:fixed;inset:0;z-index:50;background:radial-gradient(circle at 50% 42%,#1d4a57,#071014 72%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transition:opacity .6s,transform .6s}
+#splash.hide{opacity:0;transform:scale(1.2);pointer-events:none}
+#splash svg{width:240px;animation:ride 1.1s cubic-bezier(.2,.9,.3,1) both}
+@keyframes ride{from{transform:translateX(-120vw) skewX(-18deg)}60%{transform:translateX(12px) skewX(4deg)}to{transform:none}}
+.sp{transform-origin:center;transform-box:fill-box;animation:spin .6s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.ln{stroke-dasharray:90;animation:ln 1s ease-out both}@keyframes ln{from{stroke-dashoffset:90;opacity:0}to{stroke-dashoffset:0}}
+#splash h1{font-size:26px;font-style:italic;font-weight:800;animation:fd .8s .7s both}#splash h1 b{color:var(--acc)}
+#splash i{width:140px;height:4px;border-radius:4px;background:#ffffff1a;overflow:hidden;animation:fd .5s .9s both}#splash i:after{content:"";display:block;height:100%;background:var(--acc);animation:ld 1.4s .9s ease-in-out both}
+@keyframes ld{from{width:0}to{width:100%}}@keyframes fd{from{opacity:0;transform:translateY(12px)}}
+#onb{position:fixed;inset:0;z-index:30;background:var(--bg);padding:max(30px,env(safe-area-inset-top)) 22px 22px;display:none;overflow:auto}
+#onb.on{display:block;animation:fd .6s both}#onb h2{font-size:28px;margin:10px 0 6px;font-style:italic}
+input{width:100%;background:#0a1519;border:1.5px solid var(--line);color:var(--tx);padding:14px;border-radius:14px;font-size:16px;margin:6px 0 12px;outline:0;transition:.2s}
+input:focus{border-color:var(--acc);box-shadow:0 0 0 4px #ffb30022}label{font-size:13px;color:var(--mut)}
+#app{display:none;height:100dvh;flex-direction:column}#app.on{display:flex}
+header{padding:max(14px,env(safe-area-inset-top)) 20px 6px;font-size:20px;font-weight:800;font-style:italic}header b{color:var(--acc)}
+main{flex:1;position:relative;overflow:hidden}
+.page{position:absolute;inset:0;overflow-y:auto;padding:10px 16px 110px;opacity:0;transform:translateX(34px);pointer-events:none;transition:opacity .35s,transform .45s cubic-bezier(.2,.85,.25,1)}
+.page.on{opacity:1;transform:none;pointer-events:auto}.page.l{transform:translateX(-34px)}
+.card{background:var(--card);border-radius:22px;padding:16px;margin-bottom:12px;border:1px solid var(--line);animation:up .55s cubic-bezier(.2,.9,.3,1) both;animation-delay:calc(var(--i,0)*65ms);transition:transform .15s}
+.card.tap:active,.chip:active{transform:scale(.96)}@keyframes up{from{opacity:0;transform:translateY(22px) scale(.96)}}
+.h{margin:16px 4px 10px;font-size:15px;color:var(--mut)}
+.btn{position:relative;overflow:hidden;width:100%;border:0;border-radius:16px;padding:15px;font-size:15px;font-weight:800;color:#1a1200;background:linear-gradient(135deg,#ffcb3d,#ff9d00);box-shadow:0 8px 24px #ffb30033;transition:transform .15s,box-shadow .2s;margin-bottom:6px}
+.btn:active{transform:scale(.94);box-shadow:0 2px 8px #ffb30033}
+.rip{position:absolute;border-radius:50%;background:#fff8;transform:scale(0);animation:rp .6s forwards;pointer-events:none}@keyframes rp{to{transform:scale(3.5);opacity:0}}
+.mot{display:flex;gap:12px;align-items:center;margin-bottom:6px}.av{width:46px;height:46px;border-radius:14px;background:#ffb3001f;display:grid;place-items:center;font-size:24px}
+.gw{position:relative;width:170px;margin:0 auto}.gw svg{width:170px;display:block}.gt{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}.gt b{font-size:34px;font-style:italic}
+.bar{height:9px;border-radius:9px;background:#0a1519;overflow:hidden}.bar b{display:block;height:100%;width:0;border-radius:9px;transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
+.chip{display:inline-flex;gap:6px;padding:10px 14px;border-radius:30px;background:#0a1519;border:1.5px solid var(--line);margin:0 6px 8px 0;transition:.25s cubic-bezier(.3,1.6,.5,1)}
+.chip.on{background:#ffb3001f;border-color:var(--acc);transform:scale(1.07)}
+.x{color:var(--mut);padding:2px 8px}.empty{text-align:center;color:var(--mut);padding:36px 0;line-height:1.7}
+.ch{display:flex;gap:10px;height:150px;align-items:flex-end}.col{flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:6px;text-align:center;font-size:11px;color:var(--mut)}
+.col i{display:block;width:100%;height:0;min-height:4px;border-radius:8px 8px 3px 3px;background:linear-gradient(var(--acc),#ff6a1a);transition:height 1.1s cubic-bezier(.2,.8,.2,1)}
+nav{position:fixed;left:12px;right:12px;bottom:max(12px,env(safe-area-inset-bottom));display:flex;background:#11242bee;backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:26px;overflow:hidden;z-index:10;box-shadow:0 10px 30px #0008}
+nav button{flex:1;background:0;border:0;color:var(--mut);padding:11px 0 9px;font-size:11px;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:2px;z-index:1;transition:color .3s}
+nav button span{font-size:21px;transition:transform .4s cubic-bezier(.3,1.8,.5,1)}nav button.on{color:var(--acc)}nav button.on span{transform:translateY(-4px) scale(1.25)}
+#ind{position:absolute;top:0;left:0;width:25%;height:100%;transition:transform .45s cubic-bezier(.3,1.3,.5,1)}#ind:after{content:"";position:absolute;left:28%;right:28%;top:0;height:3px;border-radius:0 0 4px 4px;background:var(--acc);box-shadow:0 4px 14px var(--acc)}
+#ov{position:fixed;inset:0;background:#000a;opacity:0;pointer-events:none;transition:.3s;z-index:20}#ov.on{opacity:1;pointer-events:auto}
+#sh{position:fixed;left:0;right:0;bottom:0;z-index:21;background:#152d36;border-radius:28px 28px 0 0;padding:22px 18px calc(22px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .5s cubic-bezier(.2,.9,.25,1.05);max-height:90dvh;overflow:auto}#sh.on{transform:none}#sh h3{margin-bottom:12px;font-size:19px}
+#toast{position:fixed;top:max(16px,env(safe-area-inset-top));left:50%;z-index:60;background:var(--acc);color:#1a1200;font-weight:800;padding:11px 18px;border-radius:30px;transform:translate(-50%,-90px);transition:transform .45s cubic-bezier(.3,1.5,.5,1)}#toast.on{transform:translate(-50%,0)}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01s!important;transition-duration:.01s!important}}
+</style></head><body>
+<div id="splash"><svg viewBox="0 0 200 120"><g class="ln" stroke="#ffb300" stroke-width="4" stroke-linecap="round"><path d="M4 50h30"/><path d="M12 66h26"/></g><g fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><circle cx="55" cy="88" r="20"/><circle cx="150" cy="88" r="20"/><path d="M55 88L82 52H122L150 88"/><path d="M122 52L131 34H148"/><path d="M70 52H100"/></g><g stroke="#ffb300" stroke-width="3"><g class="sp"><path d="M55 72v32M39 88h32"/></g><g class="sp"><path d="M150 72v32M134 88h32"/></g></g><rect x="88" y="62" width="30" height="16" rx="5" fill="#ffb300"/></svg><h1>Buku Servis <b>Motor</b></h1><i></i></div>
+<div id="onb"><div style="font-size:46px">🏍️</div><h2>Kenalan sama motormu</h2><p class="mut" style="margin-bottom:18px">Cukup sekali. Data tersimpan di HP dan jalan tanpa internet.</p><label>Nama motor</label><input id="on" placeholder="Contoh: Honda Vario 125"><label>Plat nomor (opsional)</label><input id="op" placeholder="B 1234 XYZ"><label>Kilometer sekarang</label><input id="ok" type="number" inputmode="numeric" placeholder="12000"><label>Jatuh tempo pajak (opsional)</label><input id="ot" type="date"><button class="btn" onclick="start0()">Mulai</button></div>
+<div id="app"><header>Buku Servis <b>Motor</b></header><main><section class="page" id="p0"></section><section class="page" id="p1"></section><section class="page" id="p2"></section><section class="page" id="p3"></section></main>
+<nav id="nav"><div id="ind"></div><button class="on" onclick="go(0)"><span>🏠</span>Beranda</button><button onclick="go(1)"><span>🔧</span>Servis</button><button onclick="go(2)"><span>⛽</span>Bensin</button><button onclick="go(3)"><span>💰</span>Biaya</button></nav></div>
+<div id="ov"></div><div id="sh"></div><div id="toast"></div>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const C=[['oli','Oli Mesin','🛢️',2500],['rem','Kampas Rem','🛑',10000],['busi','Busi','⚡',8000],['filter','Filter Udara','🌬️',10000],['cvt','Rantai/CVT','⚙️',15000],['ban','Ban','🛞',20000]];
+let D=JSON.parse(localStorage.getItem('bsm')||'null'),tab=0,sel=new Set();
+const sv=()=>localStorage.setItem('bsm',JSON.stringify(D)),rp=n=>'Rp'+Math.round(n).toLocaleString('id-ID'),id=()=>Date.now()+Math.random(),nf=n=>Math.round(n).toLocaleString('id-ID');
+const tgl=t=>new Date(t).toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'}),cn=k=>C.find(c=>c[0]==k);
+function cnt(el,to,f=nf){let s=performance.now();(function t(n){let p=Math.min(1,(n-s)/900);el.textContent=f(to*(1-Math.pow(1-p,3)));p<1&&requestAnimationFrame(t)})(s)}
+function toast(t){let e=$('#toast');e.textContent=t;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),1900)}
+function sheet(h){$('#sh').innerHTML=h;$('#ov').classList.add('on');$('#sh').classList.add('on')}
+function closeSh(){$('#ov').classList.remove('on');$('#sh').classList.remove('on')}$('#ov').onclick=closeSh;
+const empty=t=>`<div class="empty">${t}</div>`;
+function st(k,iv){let r=iv-(D.m.km-D.last[k]),p=Math.max(0,Math.min(1,r/iv));return{r,p,c:r<=0?'var(--bad)':p<.25?'var(--warn)':'var(--ok)'}}
+function home(){let m=D.m,o=st('oli',2500),R=2*Math.PI*52,pj=m.pajak?Math.ceil((new Date(m.pajak)-Date.now())/864e5):null;
+$('#p0').innerHTML=`<div class="card" style="--i:0"><div class="mot tap" onclick="editSh()"><div class="av">🏍️</div><div><b style="font-size:18px">${m.nama}</b><div class="mut">${m.plat||'Ketuk untuk ubah data'}</div></div></div>
+<div class="gw"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" fill="none" stroke="#0a1519" stroke-width="10"/><circle id="g" cx="60" cy="60" r="52" fill="none" stroke="${o.c}" stroke-width="10" stroke-linecap="round" stroke-dasharray="${R}" stroke-dashoffset="${R}" transform="rotate(-90 60 60)" style="transition:stroke-dashoffset 1.3s cubic-bezier(.2,.8,.2,1)"/></svg><div class="gt"><small class="mut">Ganti oli</small><b id="gk">0</b><small class="mut">${o.r<=0?'km telat':'km lagi'}</small></div></div>
+<div class="mut" style="text-align:center;margin:4px 0 14px">Odometer <b class="num" id="od" style="color:var(--tx);font-size:16px">0</b> km</div><button class="btn" onclick="kmSh()">Perbarui KM</button></div>
+${pj!==null?`<div class="card" style="--i:1">📅 Pajak tahunan: <b style="color:${pj<0?'var(--bad)':pj<30?'var(--warn)':'var(--ok)'}">${pj<0?-pj+' hari telat':pj+' hari lagi'}</b></div>`:''}
+<div class="h">Kondisi komponen</div>`+C.map((c,i)=>{let s=st(c[0],c[3]);return`<div class="card tap" style="--i:${i+2}" onclick="addSh('${c[0]}')"><div class="row"><span>${c[2]} ${c[1]}</span><span class="mut">${s.r<=0?'Telat '+nf(-s.r)+' km':nf(s.r)+' km lagi'}</span></div><div class="bar"><b data-w="${s.p*100}" style="background:${s.c}"></b></div></div>`}).join('');
+setTimeout(()=>{$('#g').style.strokeDashoffset=R*(1-o.p);$$('#p0 .bar b').forEach(b=>b.style.width=b.dataset.w+'%');cnt($('#gk'),Math.abs(o.r));cnt($('#od'),m.km)},60)}
+function kmSh(){sheet(`<h3>Perbarui kilometer</h3><input id="k" type="number" inputmode="numeric" value="${D.m.km}"><button class="btn" onclick="D.m.km=Math.max(0,+$('#k').value||D.m.km);sv();closeSh();render();toast('KM diperbarui ✓')">Simpan</button>`)}
+function editSh(){sheet(`<h3>Data motor</h3><input id="en" value="${D.m.nama}"><input id="ep" value="${D.m.plat||''}" placeholder="Plat nomor"><label>Jatuh tempo pajak</label><input id="et" type="date" value="${D.m.pajak||''}"><button class="btn" onclick="D.m.nama=$('#en').value||D.m.nama;D.m.plat=$('#ep').value;D.m.pajak=$('#et').value;sv();closeSh();render()">Simpan</button>`)}
+function addSh(pre){sel=new Set(pre?[pre]:[]);sheet(`<h3>Catat servis</h3><div>${C.map(c=>`<span class="chip${sel.has(c[0])?' on':''}" onclick="tg(this,'${c[0]}')">${c[2]} ${c[1]}</span>`).join('')}</div><input id="sk" type="number" inputmode="numeric" placeholder="Kilometer" value="${D.m.km}"><input id="sb" type="number" inputmode="numeric" placeholder="Biaya (Rp)"><input id="sw" placeholder="Bengkel (opsional)"><button class="btn" onclick="saveSv()">Simpan servis</button>`)}
+function tg(e,k){sel.has(k)?sel.delete(k):sel.add(k);e.classList.toggle('on')}
+function saveSv(){if(!sel.size)return toast('Pilih komponen dulu');let km=+$('#sk').value||D.m.km;D.serv.unshift({id:id(),t:Date.now(),km,c:[...sel],b:+$('#sb').value||0,w:$('#sw').value});sel.forEach(k=>D.last[k]=km);D.m.km=Math.max(D.m.km,km);sv();closeSh();render();toast('Servis tercatat ✓')}
+function del(a,i){if(confirm('Hapus catatan ini?')){D[a]=D[a].filter(x=>x.id!=i);sv();render()}}
+function servis(){$('#p1').innerHTML=`<button class="btn" onclick="addSh()">＋ Catat Servis</button><div class="h">Riwayat servis</div>`+(D.serv.length?D.serv.map((s,i)=>`<div class="card" style="--i:${i}"><div class="row"><b>${s.c.map(k=>cn(k)[2]+' '+cn(k)[1]).join(', ')}</b><span class="x" onclick="del('serv',${s.id})">✕</span></div><div class="mut">${tgl(s.t)} · ${nf(s.km)} km${s.w?' · '+s.w:''}</div><div class="num" style="color:var(--acc);margin-top:4px">${rp(s.b)}</div></div>`).join(''):empty('Belum ada riwayat.<br>Catat servis pertamamu 🔧'))}
+function bbmSh(){let l=D.bbm[0];sheet(`<h3>Isi bensin</h3><input id="bk" type="number" inputmode="numeric" placeholder="Kilometer" value="${D.m.km}"><input id="bl" type="number" step="any" inputmode="decimal" placeholder="Jumlah liter"><input id="bh" type="number" inputmode="numeric" placeholder="Harga per liter" value="${l?l.h:''}"><button class="btn" onclick="saveB()">Simpan</button>`)}
+function saveB(){let l=+$('#bl').value,h=+$('#bh').value,km=+$('#bk').value||D.m.km;if(!l||!h)return toast('Isi liter dan harga');D.bbm.push({id:id(),t:Date.now(),km,l,h});D.m.km=Math.max(D.m.km,km);sv();closeSh();render();toast('Bensin tercatat ✓')}
+function bensin(){let a=[...D.bbm].sort((x,y)=>y.km-x.km),ef=a.map((x,i)=>a[i+1]&&x.km>a[i+1].km?(x.km-a[i+1].km)/x.l:null),v=ef.filter(Boolean),av=v.length?v.reduce((p,q)=>p+q)/v.length:0;
+$('#p2').innerHTML=`<div class="card"><div class="mut">Rata-rata irit</div><div class="num" style="font-size:38px;color:var(--acc)"><span id="av">0</span> <small style="font-size:14px">km/liter</small></div></div><button class="btn" onclick="bbmSh()">⛽ Isi Bensin</button><div class="h">Riwayat bensin</div>`+(a.length?a.map((x,i)=>`<div class="card" style="--i:${i}"><div class="row"><b>${rp(x.l*x.h)}</b><span class="x" onclick="del('bbm',${x.id})">✕</span></div><div class="mut">${tgl(x.t)} · ${x.l} L · ${rp(x.h)}/L${ef[i]?' · <b style="color:var(--ok)">'+ef[i].toFixed(1)+' km/L</b>':''}</div></div>`).join(''):empty('Belum ada catatan.<br>Isi bensin pertama? Catat di sini ⛽'));cnt($('#av'),av,n=>n.toFixed(1))}
+function biaya(){let M=[];for(let i=5;i>=0;i--){let d=new Date();d.setMonth(d.getMonth()-i,1);let k=d.getFullYear()*12+d.getMonth(),s=0,b=0,q=t=>{let e=new Date(t);return e.getFullYear()*12+e.getMonth()==k};D.serv.forEach(x=>q(x.t)&&(s+=x.b));D.bbm.forEach(x=>q(x.t)&&(b+=x.l*x.h));M.push({n:d.toLocaleDateString('id-ID',{month:'short'}),s,b})}
+let mx=Math.max(1,...M.map(x=>x.s+x.b)),c=M[5],all=D.serv.reduce((p,x)=>p+x.b,0)+D.bbm.reduce((p,x)=>p+x.l*x.h,0),dk=D.m.km-D.m.km0;
+$('#p3').innerHTML=`<div class="card"><div class="mut">Pengeluaran bulan ini</div><div class="num" style="font-size:34px" id="tt">Rp0</div><div class="mut" style="margin-top:6px">🔧 Servis ${rp(c.s)} · ⛽ Bensin ${rp(c.b)}</div></div><div class="card" style="--i:1"><div class="mut" style="margin-bottom:10px">6 bulan terakhir</div><div class="ch">${M.map(x=>`<div class="col"><i data-h="${(x.s+x.b)/mx*110}"></i>${x.n}</div>`).join('')}</div></div><div class="card" style="--i:2"><div class="row"><span class="mut">Total semua</span><b>${rp(all)}</b></div><div class="row" style="margin:0"><span class="mut">Biaya per km</span><b>${dk>0?rp(all/dk):'-'}</b></div></div>`;
+cnt($('#tt'),c.s+c.b,n=>rp(n));setTimeout(()=>$$('#p3 .col i').forEach(i=>i.style.height=i.dataset.h+'px'),80)}
+function render(){[home,servis,bensin,biaya][tab]()}
+function go(i){if(i==tab||$('#sh').classList.contains('on'))return;let o=$('#p'+tab),n=$('#p'+i),f=i>tab;o.classList.remove('on');o.classList.toggle('l',f);n.classList.toggle('l',!f);n.classList.remove('on');tab=i;render();void n.offsetWidth;n.classList.remove('l');n.classList.add('on');n.scrollTop=0;$('#ind').style.transform=`translateX(${i*100}%)`;$$('#nav button').forEach((b,j)=>b.classList.toggle('on',j==i))}
+let tx=0,ty=0;addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY},{passive:true});
+addEventListener('touchend',e=>{let dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(Math.abs(dx)>70&&Math.abs(dx)>Math.abs(dy)*1.6&&D)go(Math.max(0,Math.min(3,tab+(dx<0?1:-1))))},{passive:true});
+document.addEventListener('pointerdown',e=>{let b=e.target.closest('.btn');if(!b)return;let r=b.getBoundingClientRect(),s=document.createElement('span'),z=Math.max(r.width,r.height);s.className='rip';s.style.cssText=`width:${z}px;height:${z}px;left:${e.clientX-r.left-z/2}px;top:${e.clientY-r.top-z/2}px`;b.appendChild(s);setTimeout(()=>s.remove(),600)});
+function start0(){let km=+$('#ok').value;if(!$('#on').value||isNaN(km)||$('#ok').value==='')return toast('Isi nama motor dan KM');D={m:{nama:$('#on').value,plat:$('#op').value,km,km0:km,pajak:$('#ot').value},last:{},serv:[],bbm:[]};C.forEach(c=>D.last[c[0]]=km);sv();$('#onb').classList.remove('on');boot()}
+function boot(){$('#app').classList.add('on');$('#p0').classList.add('on');render()}
+setTimeout(()=>{$('#splash').classList.add('hide');D?boot():$('#onb').classList.add('on')},2600);
+if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+</script></body></html>
